@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -5,11 +6,16 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
-import 'package:quiz_app/provider.dart';
-import 'package:quiz_app/quiz_page.dart';
+import 'package:quiz_app/service/provider.dart';
+import 'package:quiz_app/view/quiz_page.dart';
+
+import '../models/user_model.dart';
 
 class ResultPage extends StatelessWidget {
-  const ResultPage({super.key});
+  final UserModel userModel;
+  final User firebaseUser;
+  const ResultPage(
+      {super.key, required this.userModel, required this.firebaseUser});
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +137,9 @@ class ResultPage extends StatelessWidget {
                         Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => QuizPage(),
+                              builder: (context) => QuizPage(
+                                  firebaseUser: firebaseUser,
+                                  userModel: userModel),
                             ),
                             (route) => false);
                       },
