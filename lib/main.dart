@@ -42,7 +42,7 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider<QuestionsProvider>(
       create: (context) => QuestionsProvider(),
       child: MaterialApp(
-        theme: ThemeData(primarySwatch: Colors.brown),
+        theme: ThemeData(primarySwatch: Colors.blue),
         home: LoginPage(),
         debugShowCheckedModeBanner: false,
       ),
@@ -62,7 +62,7 @@ class MyAppLoggedIn extends StatelessWidget {
     return ChangeNotifierProvider<QuestionsProvider>(
       create: (context) => QuestionsProvider(),
       child: MaterialApp(
-        theme: ThemeData(primarySwatch: Colors.brown),
+        theme: ThemeData(primarySwatch: Colors.blue),
         debugShowCheckedModeBanner: false,
         home: QuizPage(userModel: userModel, firebaseUser: firebaseUser),
       ),

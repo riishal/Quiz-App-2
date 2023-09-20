@@ -11,6 +11,10 @@ class QuestionsProvider with ChangeNotifier {
   int mark = 0;
   List<Questions> data = [];
   List<String> results = [];
+  int buttonIndex = -1;
+  bool isLoading = false;
+  int indexfornextquestion = 0;
+
   ProviderStatus status = ProviderStatus.LOADING;
   void markIncreaser() {
     if (match) {
@@ -20,37 +24,39 @@ class QuestionsProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> answerCheck(int buttonindex, pageindex, index, String result,
-      int indexfornextquestion) async {
-    buttonindex = index;
+  Future<void> answerCheck(int index, String result) async {
+    buttonIndex = index;
     if (result == data[indexfornextquestion].correctAnswer) {
-      mark++;
+      match = true;
     }
-    // markIncreaser();
+
     // ignore: avoid_print
-    print(mark);
-    // notifyListeners();
+    print(match);
+    notifyListeners();
   }
 
   fetchQuestions() async {
+    isLoading = true;
     final response =
         await http.get(Uri.parse('https://the-trivia-api.com/v2/questions'));
     if (response.statusCode == 200) {
       data = questionsFromJson(response.body);
       status = ProviderStatus.COMPLETED;
+      fetchResult(indexfornextquestion);
+      isLoading = false;
       notifyListeners();
     } else {
       throw Exception('Failed to load album');
     }
   }
 
-  List<String> fetchResult(indexfornextquestion) {
+  fetchResult(indexfornextquestion) {
+    results = [];
     if (indexfornextquestion < 10) {
       results.addAll(data[indexfornextquestion].incorrectAnswers);
       results.add(data[indexfornextquestion].correctAnswer);
       results.shuffle();
       print(results);
     }
-    return results;
   }
 }
