@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -5,10 +6,12 @@ import 'package:lottie/lottie.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import 'package:quiz_app/service/provider.dart';
+import 'package:quiz_app/view/profile_view.dart';
 import 'package:quiz_app/view/quiz_page.dart';
 import 'package:quiz_app/view/resultView_page.dart';
 
 import '../models/user_model.dart';
+import '../service/ui_helper.dart';
 
 class ResultPage extends StatelessWidget {
   final UserModel userModel;
@@ -44,9 +47,65 @@ class ResultPage extends StatelessWidget {
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                const SizedBox(
-                  height: 23,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              width: 10,
+                            ),
+                            InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => UserProfilePic(
+                                              userModel: userModel,
+                                              firebaseUser: firebaseUser,
+                                            )));
+                              },
+                              child: CircleAvatar(
+                                backgroundColor: Colors.grey[400],
+                                backgroundImage:
+                                    NetworkImage(userModel.profilepic!),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              userModel.fullName!,
+                              style: GoogleFonts.asap(
+                                  fontSize: 20,
+                                  shadows: [
+                                    Shadow(
+                                        color: Colors.black,
+                                        blurRadius: 11,
+                                        offset: Offset(2, 1)),
+                                  ],
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                          ]),
+                    ),
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20))),
+                        onPressed: () {
+                          UIHelper.showLogOut(context);
+                        },
+                        child: const Icon(
+                          Icons.logout_outlined,
+                          color: Colors.red,
+                        )),
+                  ],
                 ),
+
                 Text(
                   "Result",
                   style: GoogleFonts.asap(
@@ -162,6 +221,7 @@ class ResultPage extends StatelessWidget {
                             var getdata = Provider.of<QuestionsProvider>(
                                 context,
                                 listen: false);
+                            getdata.reviewList = [];
                             getdata.indexfornextquestion = 0;
                             Navigator.pushAndRemoveUntil(
                                 context,
@@ -195,5 +255,9 @@ class ResultPage extends StatelessWidget {
         ),
       )),
     );
+  }
+
+  delectData() async {
+    await FirebaseFirestore.instance.collection("Quiz").doc().delete();
   }
 }

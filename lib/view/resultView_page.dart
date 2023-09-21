@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:quiz_app/service/provider.dart';
@@ -51,16 +49,19 @@ class _ResultViewPageState extends State<ResultViewPage> {
                   child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
-                        Container(
-                          height: size.height * 0.88,
-                          width: size.width * 0.99,
-                          decoration: BoxDecoration(color: Colors.white),
-                          child: ListView.separated(
-                              itemBuilder: (context, index) => Container(
-                                    height: 130,
+                        Expanded(
+                          child: Container(
+                            width: size.width * 0.99,
+                            decoration:
+                                const BoxDecoration(color: Colors.white),
+                            child: ListView.separated(
+                                itemBuilder: (context, index) {
+                                  final review = getdata.reviewList[index];
+                                  return Container(
+                                    // height: 130,
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(20),
                                         color: Colors.white),
@@ -68,63 +69,64 @@ class _ResultViewPageState extends State<ResultViewPage> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
                                       children: [
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 10,
                                         ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            SizedBox(
-                                              width: 10,
-                                            ),
-                                            Text(
-                                              '${numers[index]} -',
-                                              style: TextStyle(fontSize: 15),
-                                            ),
-                                            SizedBox(
-                                              width: 320,
-                                              height: 50,
-                                              child: Text(
-                                                getdata
-                                                    .data[index].question.text,
-                                                style: TextStyle(
-                                                    fontSize: 15,
-                                                    fontWeight:
-                                                        FontWeight.bold),
+                                        FittedBox(
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              const SizedBox(
+                                                width: 10,
                                               ),
-                                            ),
-                                          ],
+                                              Text(
+                                                '${numers[index]} - ',
+                                                style: const TextStyle(
+                                                    fontSize: 15,
+                                                    overflow:
+                                                        TextOverflow.fade),
+                                              ),
+                                              SizedBox(
+                                                width: 320,
+                                                height: 50,
+                                                child: Text(
+                                                  review.question,
+                                                  style: const TextStyle(
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 10,
                                         ),
                                         Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceAround,
                                           children: [
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 4,
                                             ),
-                                            SizedBox(
-                                              height: 50,
-                                              width: 170,
+                                            Flexible(
+                                              flex: 2,
                                               child: Text(
-                                                "You Chose :dddddd ",
-                                                style: TextStyle(
+                                                "You Chose : ${review.choice}",
+                                                style: const TextStyle(
                                                     fontSize: 15,
                                                     fontWeight: FontWeight.w500,
                                                     color: Colors.blue),
                                               ),
                                             ),
-                                            SizedBox(
-                                              height: 50,
-                                              width: 170,
+                                            Expanded(
                                               child: Text(
-                                                "Correct Answer : ${getdata.data[index].correctAnswer}",
-                                                style: TextStyle(
+                                                "Correct Answer : ${review.correctAnswer}",
+                                                style: const TextStyle(
                                                     fontSize: 15,
                                                     fontWeight: FontWeight.w500,
                                                     color: Colors.green),
@@ -134,12 +136,15 @@ class _ResultViewPageState extends State<ResultViewPage> {
                                         ),
                                       ],
                                     ),
-                                  ),
-                              separatorBuilder: (context, index) => SizedBox(
-                                    child: Divider(),
-                                    height: 10,
-                                  ),
-                              itemCount: 10),
+                                  );
+                                },
+                                separatorBuilder: (context, index) =>
+                                    const SizedBox(
+                                      height: 10,
+                                      child: Divider(),
+                                    ),
+                                itemCount: getdata.reviewList.length),
+                          ),
                         )
                       ]),
                 )),

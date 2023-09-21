@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:quiz_app/service/ui_helper.dart';
 import 'package:quiz_app/service/provider.dart';
+import 'package:quiz_app/view/profile_view.dart';
 
 import '../models/user_model.dart';
 import 'result_page.dart';
@@ -66,10 +68,23 @@ class _QuizPageState extends State<QuizPage> {
                             child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  CircleAvatar(
-                                    backgroundColor: Colors.grey[400],
-                                    backgroundImage: NetworkImage(
-                                        widget.userModel.profilepic!),
+                                  InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  UserProfilePic(
+                                                    userModel: widget.userModel,
+                                                    firebaseUser:
+                                                        widget.firebaseUser,
+                                                  )));
+                                    },
+                                    child: CircleAvatar(
+                                      backgroundColor: Colors.grey[400],
+                                      backgroundImage: NetworkImage(
+                                          widget.userModel.profilepic!),
+                                    ),
                                   ),
                                   const SizedBox(
                                     width: 10,
@@ -78,8 +93,14 @@ class _QuizPageState extends State<QuizPage> {
                                     widget.userModel.fullName!,
                                     style: GoogleFonts.asap(
                                         fontSize: 20,
+                                        shadows: [
+                                          Shadow(
+                                              color: Colors.black,
+                                              blurRadius: 11,
+                                              offset: Offset(2, 1)),
+                                        ],
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.black),
+                                        color: Colors.white),
                                   ),
                                 ]),
                           ),
@@ -220,41 +241,75 @@ class _QuizPageState extends State<QuizPage> {
                       const SizedBox(
                         height: 10,
                       ),
-                      Container(
-                        height: 50,
-                        margin: const EdgeInsets.only(
-                            bottom: 10, left: 5, right: 5),
-                        child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(15))),
-                            onPressed: () {
-                              getdata.markIncreaser();
-                              getdata.indexfornextquestion++;
-                              getdata.fetchResult(getdata.indexfornextquestion);
-                              pageIndex <= 9
-                                  ? pageIndex++
-                                  : Navigator.pushAndRemoveUntil(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => ResultPage(
-                                          firebaseUser: widget.firebaseUser,
-                                          userModel: widget.userModel,
-                                        ),
-                                      ),
-                                      (route) => false);
-                              getdata.buttonIndex = -1;
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            height: 50,
+                            width: 100,
+                            margin: const EdgeInsets.only(
+                                bottom: 10, left: 5, right: 5),
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15))),
+                              onPressed: () {
+                                getdata.indexfornextquestion--;
+                                pageIndex--;
+                              },
+                              child: Icon(
+                                Icons.keyboard_backspace,
+                                size: 30,
+                                weight: 50,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                          Container(
+                            height: 50,
+                            width: 200,
+                            margin: const EdgeInsets.only(
+                                bottom: 10, left: 5, right: 5),
+                            child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(15))),
+                                onPressed: () {
+                                  // uploadData(getdata.results[getdata.buttonIndex]);
 
-                              // print(context.read<QuestionsProvider>().mark);
-                            },
-                            child: Text(
-                              "NEXT",
-                              style: GoogleFonts.asap(
-                                  fontSize: 25,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black),
-                            )),
+                                  getdata.markIncreaser();
+                                  getdata.addToReviewList();
+                                  getdata.indexfornextquestion++;
+                                  getdata.fetchResult(
+                                      getdata.indexfornextquestion);
+                                  pageIndex <= 9
+                                      ? pageIndex++
+                                      : Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) => ResultPage(
+                                              firebaseUser: widget.firebaseUser,
+                                              userModel: widget.userModel,
+                                            ),
+                                          ),
+                                          (route) => false);
+                                  getdata.buttonIndex = -1;
+                                  getdata.selectedChoice = '';
+
+                                  // print(context.read<QuestionsProvider>().mark);
+                                },
+                                child: Text(
+                                  "NEXT",
+                                  style: GoogleFonts.asap(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black),
+                                )),
+                          ),
+                        ],
                       )
                     ]),
                   ),
@@ -270,4 +325,15 @@ class _QuizPageState extends State<QuizPage> {
       }
     });
   }
+
+  // uploadData(
+  //   result,
+  // ) async {
+  //   Map<String, dynamic> uploadData = {
+  //     "question": getdata.data[getdata.indexfornextquestion].question.text,
+  //     "answers": getdata.data[getdata.indexfornextquestion].correctAnswer,
+  //     "choice": result.toString()
+  //   };
+  //   await FirebaseFirestore.instance.collection("Quiz").doc().set(uploadData);
+  // }
 }
