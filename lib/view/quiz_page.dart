@@ -1,14 +1,13 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:quiz_app/provider/provider.dart';
 import 'package:quiz_app/service/ui_helper.dart';
-import 'package:quiz_app/service/provider.dart';
+
 import 'package:quiz_app/view/profile_view.dart';
 
 import '../models/user_model.dart';
-import 'result_page.dart';
 
 class QuizPage extends StatefulWidget {
   final UserModel userModel;
@@ -22,8 +21,6 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
   late QuestionsProvider getdata;
-  int pageIndex = 1;
-  bool match = false;
   List<String> choice = ['A.', 'B.', 'C.', 'D.'];
 
   @override
@@ -35,13 +32,16 @@ class _QuizPageState extends State<QuizPage> {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Consumer<QuestionsProvider>(builder: (context, getdata, child) {
       if (getdata.status == ProviderStatus.COMPLETED) {
         return Scaffold(
           backgroundColor: const Color.fromARGB(255, 138, 197, 246),
           body: getdata.isLoading
               ? const Center(
-                  child: CircularProgressIndicator(),
+                  child: CircularProgressIndicator(
+                    color: Colors.black,
+                  ),
                 )
               : SafeArea(
                   child: Container(
@@ -53,12 +53,12 @@ class _QuizPageState extends State<QuizPage> {
                           end: Alignment.bottomCenter,
                           colors: [
                         Color.fromARGB(255, 138, 197, 246),
-                        Colors.blue,
+                        Colors.white,
                         Color.fromARGB(255, 138, 197, 246)
                       ])),
                   child: Container(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 15,
+                      horizontal: 12,
                     ),
                     child: ListView(children: [
                       Row(
@@ -94,7 +94,7 @@ class _QuizPageState extends State<QuizPage> {
                                     style: GoogleFonts.asap(
                                         fontSize: 20,
                                         shadows: [
-                                          Shadow(
+                                          const Shadow(
                                               color: Colors.black,
                                               blurRadius: 11,
                                               offset: Offset(2, 1)),
@@ -120,29 +120,27 @@ class _QuizPageState extends State<QuizPage> {
                       ),
                       CircleAvatar(
                           backgroundColor: Colors.amber,
-                          radius: 40,
+                          radius: 30,
                           child: Text(
-                            "$pageIndex/10",
+                            "${getdata.pageIndex}/10",
                             style: GoogleFonts.asap(
-                                fontSize: 25,
+                                fontSize: 20,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.black),
                           )),
                       const SizedBox(
-                        height: 10,
+                        height: 5,
                       ),
                       Container(
-                          height: 200,
-                          width: 360,
+                          height: size.height * 0.27,
                           decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(50)),
+                              borderRadius: BorderRadius.circular(30)),
                           child: Center(
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const SizedBox(
-                                  width: 10,
+                                  width: 5,
                                 ),
                                 const CircleAvatar(
                                   radius: 14,
@@ -158,15 +156,16 @@ class _QuizPageState extends State<QuizPage> {
                                 ),
                                 Expanded(
                                   child: Text(
-                                    (getdata.indexfornextquestion < 10)
+                                    (getdata.indexfornextquestion < 10 &&
+                                            getdata.indexfornextquestion >= 0)
                                         ? getdata
                                             .data[getdata.indexfornextquestion]
                                             .question
                                             .text
                                         : '',
                                     style: GoogleFonts.asap(
-                                        fontSize: 25,
-                                        fontWeight: FontWeight.w400,
+                                        fontSize: 23,
+                                        fontWeight: FontWeight.w500,
                                         color: Colors.black),
                                   ),
                                 ),
@@ -197,6 +196,12 @@ class _QuizPageState extends State<QuizPage> {
                                         color: getdata.buttonIndex == index
                                             ? Colors.black
                                             : Colors.white,
+                                        boxShadow: [
+                                          BoxShadow(
+                                              blurRadius: 1,
+                                              color: Colors.grey,
+                                              offset: Offset(3, 3)),
+                                        ],
                                         borderRadius:
                                             BorderRadius.circular(15)),
                                     child: Center(
@@ -219,7 +224,7 @@ class _QuizPageState extends State<QuizPage> {
                                           width: 27,
                                         ),
                                         SizedBox(
-                                          width: 200,
+                                          width: 260,
                                           child: Text(
                                             result,
                                             style: GoogleFonts.asap(
@@ -246,29 +251,30 @@ class _QuizPageState extends State<QuizPage> {
                         children: [
                           Container(
                             height: 50,
-                            width: 100,
+                            width: 170,
                             margin: const EdgeInsets.only(
                                 bottom: 10, left: 5, right: 5),
                             child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15))),
-                              onPressed: () {
-                                getdata.indexfornextquestion--;
-                                pageIndex--;
-                              },
-                              child: Icon(
-                                Icons.keyboard_backspace,
-                                size: 30,
-                                weight: 50,
-                                color: Colors.black,
-                              ),
-                            ),
+                                style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.white,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(15))),
+                                onPressed: () {
+                                  getdata.backToPreviousPage(context,
+                                      widget.firebaseUser, widget.userModel);
+                                },
+                                child: Text(
+                                  "PREVIOUS",
+                                  style: GoogleFonts.asap(
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black),
+                                )),
                           ),
                           Container(
                             height: 50,
-                            width: 200,
+                            width: 170,
                             margin: const EdgeInsets.only(
                                 bottom: 10, left: 5, right: 5),
                             child: ElevatedButton(
@@ -280,24 +286,8 @@ class _QuizPageState extends State<QuizPage> {
                                 onPressed: () {
                                   // uploadData(getdata.results[getdata.buttonIndex]);
 
-                                  getdata.markIncreaser();
-                                  getdata.addToReviewList();
-                                  getdata.indexfornextquestion++;
-                                  getdata.fetchResult(
-                                      getdata.indexfornextquestion);
-                                  pageIndex <= 9
-                                      ? pageIndex++
-                                      : Navigator.pushAndRemoveUntil(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) => ResultPage(
-                                              firebaseUser: widget.firebaseUser,
-                                              userModel: widget.userModel,
-                                            ),
-                                          ),
-                                          (route) => false);
-                                  getdata.buttonIndex = -1;
-                                  getdata.selectedChoice = '';
+                                  getdata.nextPage(context, widget.firebaseUser,
+                                      widget.userModel);
 
                                   // print(context.read<QuestionsProvider>().mark);
                                 },
@@ -319,21 +309,10 @@ class _QuizPageState extends State<QuizPage> {
         return const Scaffold(
           backgroundColor: Colors.white,
           body: Center(
-            child: CircularProgressIndicator(color: Colors.white),
+            child: CircularProgressIndicator(color: Colors.blue),
           ),
         );
       }
     });
   }
-
-  // uploadData(
-  //   result,
-  // ) async {
-  //   Map<String, dynamic> uploadData = {
-  //     "question": getdata.data[getdata.indexfornextquestion].question.text,
-  //     "answers": getdata.data[getdata.indexfornextquestion].correctAnswer,
-  //     "choice": result.toString()
-  //   };
-  //   await FirebaseFirestore.instance.collection("Quiz").doc().set(uploadData);
-  // }
 }

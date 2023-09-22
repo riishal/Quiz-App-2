@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:quiz_app/models/user_model.dart';
 import 'package:quiz_app/service/firebase_service.dart';
-import 'package:quiz_app/service/provider.dart';
+import 'package:quiz_app/provider/provider.dart';
 import 'package:quiz_app/view/login_page.dart';
 import 'package:quiz_app/view/quiz_page.dart';
 import 'package:uuid/uuid.dart';
@@ -43,8 +43,8 @@ class MyApp extends StatelessWidget {
       create: (context) => QuestionsProvider(),
       child: MaterialApp(
         theme: ThemeData(primarySwatch: Colors.blue),
-        home: LoginPage(),
         debugShowCheckedModeBanner: false,
+        home: LoginPage(),
       ),
     );
   }

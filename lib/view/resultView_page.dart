@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:quiz_app/service/provider.dart';
+import 'package:quiz_app/provider/provider.dart';
 
 class ResultViewPage extends StatefulWidget {
   const ResultViewPage({super.key});
@@ -63,7 +63,8 @@ class _ResultViewPageState extends State<ResultViewPage> {
                                   return Container(
                                     // height: 130,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20),
+                                        boxShadow: [BoxShadow()],
+                                        borderRadius: BorderRadius.circular(10),
                                         color: Colors.white),
                                     child: Column(
                                       mainAxisAlignment:
@@ -85,7 +86,7 @@ class _ResultViewPageState extends State<ResultViewPage> {
                                               Text(
                                                 '${numers[index]} - ',
                                                 style: const TextStyle(
-                                                    fontSize: 15,
+                                                    fontSize: 18,
                                                     overflow:
                                                         TextOverflow.fade),
                                               ),
@@ -103,32 +104,62 @@ class _ResultViewPageState extends State<ResultViewPage> {
                                             ],
                                           ),
                                         ),
-                                        const SizedBox(
-                                          height: 10,
-                                        ),
                                         Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
                                           children: [
-                                            const SizedBox(
-                                              width: 4,
+                                            SizedBox(
+                                              width: 10,
                                             ),
-                                            Flexible(
-                                              flex: 2,
-                                              child: Text(
-                                                "You Chose : ${review.choice}",
-                                                style: const TextStyle(
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.w500,
-                                                    color: Colors.blue),
-                                              ),
+                                            review.choice ==
+                                                    review.correctAnswer
+                                                ? Icon(
+                                                    Icons.done_rounded,
+                                                    size: 28,
+                                                    color: Colors.green,
+                                                  )
+                                                : Icon(
+                                                    Icons.cancel_outlined,
+                                                    size: 28,
+                                                    color: Colors.red,
+                                                  ),
+                                            SizedBox(
+                                              width: 10,
+                                            ),
+                                            Text(
+                                              "You Chose : ",
+                                              style: const TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: Colors.black),
                                             ),
                                             Expanded(
                                               child: Text(
-                                                "Correct Answer : ${review.correctAnswer}",
+                                                "${review.choice}",
                                                 style: const TextStyle(
                                                     fontSize: 15,
-                                                    fontWeight: FontWeight.w500,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: Colors.blue),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            SizedBox(
+                                              width: 50,
+                                            ),
+                                            Text(
+                                              "Correct Answer : ",
+                                              style: const TextStyle(
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: Colors.black),
+                                            ),
+                                            Expanded(
+                                              child: Text(
+                                                "${review.correctAnswer}",
+                                                style: const TextStyle(
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.w400,
                                                     color: Colors.green),
                                               ),
                                             ),
@@ -140,7 +171,7 @@ class _ResultViewPageState extends State<ResultViewPage> {
                                 },
                                 separatorBuilder: (context, index) =>
                                     const SizedBox(
-                                      height: 10,
+                                      height: 15,
                                       child: Divider(),
                                     ),
                                 itemCount: getdata.reviewList.length),

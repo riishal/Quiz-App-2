@@ -5,12 +5,13 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 import 'package:provider/provider.dart';
-import 'package:quiz_app/service/provider.dart';
+
 import 'package:quiz_app/view/profile_view.dart';
 import 'package:quiz_app/view/quiz_page.dart';
 import 'package:quiz_app/view/resultView_page.dart';
 
 import '../models/user_model.dart';
+import '../provider/provider.dart';
 import '../service/ui_helper.dart';
 
 class ResultPage extends StatelessWidget {
@@ -54,7 +55,7 @@ class ResultPage extends StatelessWidget {
                       child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            SizedBox(
+                            const SizedBox(
                               width: 10,
                             ),
                             InkWell(
@@ -81,7 +82,7 @@ class ResultPage extends StatelessWidget {
                               style: GoogleFonts.asap(
                                   fontSize: 20,
                                   shadows: [
-                                    Shadow(
+                                    const Shadow(
                                         color: Colors.black,
                                         blurRadius: 11,
                                         offset: Offset(2, 1)),
@@ -184,7 +185,7 @@ class ResultPage extends StatelessWidget {
                       height: 50,
                       width: 170,
                       child: ElevatedButton.icon(
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.padding_outlined,
                           color: Colors.black,
                         ),
@@ -203,7 +204,7 @@ class ResultPage extends StatelessWidget {
                           Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => ResultViewPage(),
+                                builder: (context) => const ResultViewPage(),
                               ));
                         },
                       ),
@@ -223,6 +224,7 @@ class ResultPage extends StatelessWidget {
                                 listen: false);
                             getdata.reviewList = [];
                             getdata.indexfornextquestion = 0;
+                            getdata.pageIndex = 1;
                             Navigator.pushAndRemoveUntil(
                                 context,
                                 MaterialPageRoute(
