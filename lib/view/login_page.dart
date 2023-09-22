@@ -72,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
 
   void signUpGoogle() async {
     UserCredential? userCredential;
-    // UIHelper.showLoadingDialog(context, "GoogleSign in...");
+    UIHelper.showLoadingDialog(context, "GoogleSign in...");
 
     try {
       userCredential = await FirebaseHelper().signInWithGoogle();

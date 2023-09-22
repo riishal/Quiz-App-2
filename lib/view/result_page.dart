@@ -22,6 +22,7 @@ class ResultPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     bool win = context.read<QuestionsProvider>().mark >= 5;
     return Scaffold(
       backgroundColor: Colors.blue,
@@ -52,45 +53,43 @@ class ResultPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Container(
-                      child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => UserProfilePic(
-                                              userModel: userModel,
-                                              firebaseUser: firebaseUser,
-                                            )));
-                              },
-                              child: CircleAvatar(
-                                backgroundColor: Colors.grey[400],
-                                backgroundImage:
-                                    NetworkImage(userModel.profilepic!),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              userModel.fullName!,
-                              style: GoogleFonts.asap(
-                                  fontSize: 20,
-                                  shadows: [
-                                    const Shadow(
-                                        color: Colors.black,
-                                        blurRadius: 11,
-                                        offset: Offset(2, 1)),
-                                  ],
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
-                            ),
-                          ]),
+                      child: Row(children: [
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => UserProfilePic(
+                                          userModel: userModel,
+                                          firebaseUser: firebaseUser,
+                                        )));
+                          },
+                          child: CircleAvatar(
+                            backgroundColor: Colors.grey[400],
+                            backgroundImage:
+                                NetworkImage(userModel.profilepic!),
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Text(
+                          userModel.fullName!,
+                          style: GoogleFonts.asap(
+                              fontSize: 20,
+                              shadows: [
+                                const Shadow(
+                                    color: Colors.black,
+                                    blurRadius: 11,
+                                    offset: Offset(2, 1)),
+                              ],
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                      ]),
                     ),
                     ElevatedButton(
                         style: ElevatedButton.styleFrom(
@@ -164,7 +163,7 @@ class ResultPage extends StatelessWidget {
                             style: GoogleFonts.asap(
                                 fontSize: 35,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black),
+                                color: Colors.red),
                           ),
                           Text(
                             "You Lost",
@@ -182,8 +181,8 @@ class ResultPage extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     SizedBox(
-                      height: 50,
-                      width: 170,
+                      height: size.height * 0.07,
+                      width: size.width * 0.43,
                       child: ElevatedButton.icon(
                         icon: const Icon(
                           Icons.padding_outlined,
@@ -192,7 +191,7 @@ class ResultPage extends StatelessWidget {
                         label: Text(
                           "View Result",
                           style: GoogleFonts.asap(
-                              fontSize: 20,
+                              fontSize: 18,
                               fontWeight: FontWeight.bold,
                               color: Colors.black),
                         ),
@@ -210,8 +209,8 @@ class ResultPage extends StatelessWidget {
                       ),
                     ),
                     SizedBox(
-                      height: 50,
-                      width: 170,
+                      height: size.height * 0.07,
+                      width: size.width * 0.43,
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.black,

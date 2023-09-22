@@ -172,10 +172,13 @@ class _ResultViewPageState extends State<ResultViewPage> {
                                 separatorBuilder: (context, index) =>
                                     const SizedBox(
                                       height: 15,
-                                      child: Divider(),
+                                      child: Center(child: Divider()),
                                     ),
                                 itemCount: getdata.reviewList.length),
                           ),
+                        ),
+                        SizedBox(
+                          height: 20,
                         )
                       ]),
                 )),

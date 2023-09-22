@@ -58,7 +58,7 @@ class _QuizPageState extends State<QuizPage> {
                       ])),
                   child: Container(
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
+                      horizontal: 10,
                     ),
                     child: ListView(children: [
                       Row(
@@ -129,51 +129,50 @@ class _QuizPageState extends State<QuizPage> {
                                 color: Colors.black),
                           )),
                       const SizedBox(
-                        height: 5,
-                      ),
-                      Container(
-                          height: size.height * 0.27,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30)),
-                          child: Center(
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                const CircleAvatar(
-                                  radius: 14,
-                                  backgroundColor: Colors.amber,
-                                  child: Icon(
-                                    Icons.question_mark,
-                                    color: Color.fromARGB(255, 48, 47, 47),
-                                    size: 17,
-                                  ),
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Expanded(
-                                  child: Text(
-                                    (getdata.indexfornextquestion < 10 &&
-                                            getdata.indexfornextquestion >= 0)
-                                        ? getdata
-                                            .data[getdata.indexfornextquestion]
-                                            .question
-                                            .text
-                                        : '',
-                                    style: GoogleFonts.asap(
-                                        fontSize: 23,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.black),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          )),
-                      const SizedBox(
                         height: 20,
+                      ),
+                      SizedBox(
+                        height: size.height * 0.20,
+                        child: Center(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              const CircleAvatar(
+                                radius: 14,
+                                backgroundColor: Colors.amber,
+                                child: Icon(
+                                  Icons.question_mark,
+                                  color: Color.fromARGB(255, 48, 47, 47),
+                                  size: 17,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Expanded(
+                                child: Text(
+                                  (getdata.indexfornextquestion < 10 &&
+                                          getdata.indexfornextquestion >= 0)
+                                      ? getdata
+                                          .data[getdata.indexfornextquestion]
+                                          .question
+                                          .text
+                                      : '',
+                                  style: GoogleFonts.asap(
+                                      fontSize: 23,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 30,
                       ),
                       SizedBox(
                           // height: 340,
@@ -188,7 +187,7 @@ class _QuizPageState extends State<QuizPage> {
                                     getdata.answerCheck(index, result);
                                   },
                                   child: Container(
-                                    height: 70,
+                                    height: 60,
                                     // width: 200,
                                     margin: const EdgeInsets.only(
                                         bottom: 10, left: 5, right: 5),
@@ -213,27 +212,29 @@ class _QuizPageState extends State<QuizPage> {
                                         Text(
                                           '${index + 1}.',
                                           style: GoogleFonts.asap(
-                                            fontSize: 25,
-                                            fontWeight: FontWeight.w500,
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
                                             color: getdata.buttonIndex == index
                                                 ? Colors.white
                                                 : Colors.black,
                                           ),
                                         ),
                                         const SizedBox(
-                                          width: 27,
+                                          width: 20,
                                         ),
-                                        SizedBox(
-                                          width: 260,
-                                          child: Text(
-                                            result,
-                                            style: GoogleFonts.asap(
-                                                fontSize: 19,
-                                                fontWeight: FontWeight.w400,
-                                                color:
-                                                    getdata.buttonIndex == index
-                                                        ? Colors.white
-                                                        : Colors.black),
+                                        Expanded(
+                                          child: SizedBox(
+                                            width: 260,
+                                            child: Text(
+                                              result,
+                                              style: GoogleFonts.asap(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w400,
+                                                  color: getdata.buttonIndex ==
+                                                          index
+                                                      ? Colors.white
+                                                      : Colors.black),
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -250,8 +251,8 @@ class _QuizPageState extends State<QuizPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(
-                            height: 50,
-                            width: 170,
+                            height: size.height * 0.07,
+                            width: size.width * 0.40,
                             margin: const EdgeInsets.only(
                                 bottom: 10, left: 5, right: 5),
                             child: ElevatedButton(
@@ -267,19 +268,19 @@ class _QuizPageState extends State<QuizPage> {
                                 child: Text(
                                   "PREVIOUS",
                                   style: GoogleFonts.asap(
-                                      fontSize: 25,
+                                      fontSize: 20,
                                       fontWeight: FontWeight.w500,
                                       color: Colors.black),
                                 )),
                           ),
                           Container(
-                            height: 50,
-                            width: 170,
+                            height: size.height * 0.07,
+                            width: size.width * 0.40,
                             margin: const EdgeInsets.only(
                                 bottom: 10, left: 5, right: 5),
                             child: ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.white,
+                                    backgroundColor: Colors.black,
                                     shape: RoundedRectangleBorder(
                                         borderRadius:
                                             BorderRadius.circular(15))),
@@ -294,9 +295,9 @@ class _QuizPageState extends State<QuizPage> {
                                 child: Text(
                                   "NEXT",
                                   style: GoogleFonts.asap(
-                                      fontSize: 25,
+                                      fontSize: 20,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.black),
+                                      color: Colors.white),
                                 )),
                           ),
                         ],
