@@ -86,9 +86,9 @@ class _ResultViewPageState extends State<ResultViewPage> {
                                               Text(
                                                 '${numers[index]} - ',
                                                 style: const TextStyle(
-                                                    fontSize: 18,
-                                                    overflow:
-                                                        TextOverflow.fade),
+                                                    fontSize: 19,
+                                                    fontWeight:
+                                                        FontWeight.bold),
                                               ),
                                               SizedBox(
                                                 width: 320,
@@ -165,6 +165,9 @@ class _ResultViewPageState extends State<ResultViewPage> {
                                             ),
                                           ],
                                         ),
+                                        SizedBox(
+                                          height: 20,
+                                        )
                                       ],
                                     ),
                                   );
@@ -172,7 +175,6 @@ class _ResultViewPageState extends State<ResultViewPage> {
                                 separatorBuilder: (context, index) =>
                                     const SizedBox(
                                       height: 15,
-                                      child: Center(child: Divider()),
                                     ),
                                 itemCount: getdata.reviewList.length),
                           ),
