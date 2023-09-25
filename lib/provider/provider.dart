@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:quiz_app/models/model.dart';
+import 'package:quiz_app/models/quiz_model.dart';
 import 'package:quiz_app/view/quiz_page.dart';
 
-import '../models/review_model.dart';
 import '../view/result_page.dart';
 
 // ignore_for_file: constant_identifier_names
@@ -11,6 +11,9 @@ import '../view/result_page.dart';
 enum ProviderStatus { LOADING, COMPLETED }
 
 class QuestionsProvider with ChangeNotifier {
+  List<QuizModel> quizList = [];
+  List<List<String>> choices = [];
+
   bool match = false;
   int mark = 0;
   List<Questions> data = [];
@@ -18,9 +21,10 @@ class QuestionsProvider with ChangeNotifier {
   int buttonIndex = -1;
   bool isLoading = false;
   int indexfornextquestion = 0;
-  List<ReviewModel> reviewList = [];
+  // List<ReviewModel> reviewList = [];
   String selectedChoice = '';
   int pageIndex = 1;
+  bool previousPage = false;
 
   ProviderStatus status = ProviderStatus.LOADING;
   void markIncreaser() {
@@ -33,6 +37,7 @@ class QuestionsProvider with ChangeNotifier {
   }
 
   backToPreviousPage(context, firebaseUser, userModel) {
+    previousPage = true;
     if (indexfornextquestion > 0) {
       indexfornextquestion--;
     } else if (indexfornextquestion < 0) {
@@ -51,15 +56,18 @@ class QuestionsProvider with ChangeNotifier {
     print('////////////////// pageIndex: $pageIndex');
     print('////////////////// index for next: $indexfornextquestion');
 
-    fetchResult(indexfornextquestion);
+    // fetchResult(indexfornextquestion);
+    // results = reviewList[indexfornextquestion].choiceList;
+    // buttonIndex = reviewList[indexfornextquestion].selectedIndex;
+    // print(
+    //     '////////////////////////////back choices ${reviewList[indexfornextquestion].choiceList}');
     notifyListeners();
   }
 
   nextPage(context, firebaseUser, userModel) {
     markIncreaser();
-    addToReviewList();
     indexfornextquestion++;
-    fetchResult(indexfornextquestion);
+    notifyListeners();
     pageIndex < 10
         ? pageIndex++
         : Navigator.pushAndRemoveUntil(
@@ -73,31 +81,35 @@ class QuestionsProvider with ChangeNotifier {
             (route) => false);
     buttonIndex = -1;
     selectedChoice = '';
+    previousPage = false;
   }
 
   Future<void> answerCheck(int index, String result) async {
     buttonIndex = index;
     selectedChoice = result;
-    if (result == data[indexfornextquestion].correctAnswer) {
+    if (result == quizList[indexfornextquestion].answer) {
       match = true;
     }
-    // ignore: avoid_print
+    quizList[indexfornextquestion].selectedIndex = index;
     print(match);
     notifyListeners();
   }
 
-  addToReviewList() {
-    if (indexfornextquestion < 10 && indexfornextquestion > 0) {
-      ReviewModel reviewModel = ReviewModel(
-          question: data[indexfornextquestion].question.text,
-          choice: selectedChoice,
-          correctAnswer: data[indexfornextquestion].correctAnswer);
-      reviewList.add(reviewModel);
-    }
-    for (var r in reviewList) {
-      print([r.question, r.choice, r.correctAnswer].toString());
-    }
-  }
+  // addToReviewList() {
+  //   if (indexfornextquestion < 10 && indexfornextquestion >= 0) {
+  //     ReviewModel reviewModel = ReviewModel(
+  //         question: data[indexfornextquestion].question.text,
+  //         choice: selectedChoice,
+  //         correctAnswer: data[indexfornextquestion].correctAnswer,
+  //         choiceList: results,
+  //         selectedIndex: buttonIndex);
+  //     reviewList.add(reviewModel);
+  //   }
+  // print('//////////////////////////// previous page: $previousPage');
+  // for (var r in reviewList) {
+  //   print('//////////////////////////// choiceList : ${r.choiceList}');
+  // }
+  // }
 
   fetchQuestions() async {
     isLoading = true;
@@ -106,7 +118,17 @@ class QuestionsProvider with ChangeNotifier {
     if (response.statusCode == 200) {
       data = questionsFromJson(response.body);
       status = ProviderStatus.COMPLETED;
-      fetchResult(indexfornextquestion);
+      // fetchResult(indexfornextquestion);
+      for (var i = 0; i < data.length; i++) {
+        QuizModel quizModel = QuizModel(
+            id: i,
+            question: data[i].question.text,
+            answer: data[i].correctAnswer,
+            choices: arrangeChoices(i),
+            selectedIndex: -1);
+        quizList.add(quizModel);
+      }
+      print('///////////////////// quizList: ${quizList.length}}');
       isLoading = false;
       notifyListeners();
     } else {
@@ -114,13 +136,13 @@ class QuestionsProvider with ChangeNotifier {
     }
   }
 
-  fetchResult(indexfornextquestion) {
-    results = [];
-    if (indexfornextquestion < 10) {
-      results.addAll(data[indexfornextquestion].incorrectAnswers);
-      results.add(data[indexfornextquestion].correctAnswer);
-      results.shuffle();
-      print(results);
-    }
+  List<String> arrangeChoices(int i) {
+    List<String> shuffleChoice = [];
+    shuffleChoice.addAll(data[i].incorrectAnswers);
+    shuffleChoice.add(data[i].correctAnswer);
+    shuffleChoice.shuffle();
+    // choices.add(shuffleChoice);
+    print('////////////////// shuffle: $choices');
+    return shuffleChoice;
   }
 }

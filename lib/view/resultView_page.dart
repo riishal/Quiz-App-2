@@ -11,16 +11,6 @@ class ResultViewPage extends StatefulWidget {
 }
 
 class _ResultViewPageState extends State<ResultViewPage> {
-  late QuestionsProvider getdata;
-  List<String> numers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
-
-  @override
-  void initState() {
-    getdata = Provider.of<QuestionsProvider>(context, listen: false);
-    getdata.fetchQuestions();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -31,7 +21,7 @@ class _ResultViewPageState extends State<ResultViewPage> {
           backgroundColor: Colors.white,
           appBar: AppBar(
             centerTitle: true,
-            backgroundColor: Colors.black,
+            backgroundColor: const Color.fromARGB(255, 138, 197, 246),
             title: Text(
               "Quiz Review",
               style: GoogleFonts.asap(
@@ -59,11 +49,11 @@ class _ResultViewPageState extends State<ResultViewPage> {
                                 const BoxDecoration(color: Colors.white),
                             child: ListView.separated(
                                 itemBuilder: (context, index) {
-                                  final review = getdata.reviewList[index];
+                                  final review = getdata.quizList[index];
                                   return Container(
                                     // height: 130,
                                     decoration: BoxDecoration(
-                                        boxShadow: [BoxShadow()],
+                                        boxShadow: const [BoxShadow()],
                                         borderRadius: BorderRadius.circular(10),
                                         color: Colors.white),
                                     child: Column(
@@ -84,7 +74,7 @@ class _ResultViewPageState extends State<ResultViewPage> {
                                                 width: 10,
                                               ),
                                               Text(
-                                                '${numers[index]} - ',
+                                                '${review.id + 1} - ',
                                                 style: const TextStyle(
                                                     fontSize: 19,
                                                     fontWeight:
@@ -106,34 +96,44 @@ class _ResultViewPageState extends State<ResultViewPage> {
                                         ),
                                         Row(
                                           children: [
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 10,
                                             ),
-                                            review.choice ==
-                                                    review.correctAnswer
-                                                ? Icon(
-                                                    Icons.done_rounded,
-                                                    size: 28,
-                                                    color: Colors.green,
-                                                  )
-                                                : Icon(
+                                            review.selectedIndex != -1
+                                                ? review.choices[review
+                                                            .selectedIndex] ==
+                                                        review.answer
+                                                    ? const Icon(
+                                                        Icons.done_rounded,
+                                                        size: 28,
+                                                        color: Colors.green,
+                                                      )
+                                                    : const Icon(
+                                                        Icons.cancel_outlined,
+                                                        size: 28,
+                                                        color: Colors.red,
+                                                      )
+                                                : const Icon(
                                                     Icons.cancel_outlined,
                                                     size: 28,
                                                     color: Colors.red,
                                                   ),
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 10,
                                             ),
-                                            Text(
+                                            const Text(
                                               "You Chose : ",
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                   fontSize: 15,
                                                   fontWeight: FontWeight.w400,
                                                   color: Colors.black),
                                             ),
                                             Expanded(
                                               child: Text(
-                                                "${review.choice}",
+                                                review.selectedIndex != -1
+                                                    ? review.choices[
+                                                        review.selectedIndex]
+                                                    : "",
                                                 style: const TextStyle(
                                                     fontSize: 15,
                                                     fontWeight: FontWeight.w400,
@@ -144,19 +144,19 @@ class _ResultViewPageState extends State<ResultViewPage> {
                                         ),
                                         Row(
                                           children: [
-                                            SizedBox(
+                                            const SizedBox(
                                               width: 50,
                                             ),
-                                            Text(
+                                            const Text(
                                               "Correct Answer : ",
-                                              style: const TextStyle(
+                                              style: TextStyle(
                                                   fontSize: 15,
                                                   fontWeight: FontWeight.w400,
                                                   color: Colors.black),
                                             ),
                                             Expanded(
                                               child: Text(
-                                                "${review.correctAnswer}",
+                                                review.answer,
                                                 style: const TextStyle(
                                                     fontSize: 15,
                                                     fontWeight: FontWeight.w400,
@@ -165,7 +165,7 @@ class _ResultViewPageState extends State<ResultViewPage> {
                                             ),
                                           ],
                                         ),
-                                        SizedBox(
+                                        const SizedBox(
                                           height: 20,
                                         )
                                       ],
@@ -176,10 +176,10 @@ class _ResultViewPageState extends State<ResultViewPage> {
                                     const SizedBox(
                                       height: 15,
                                     ),
-                                itemCount: getdata.reviewList.length),
+                                itemCount: getdata.quizList.length),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         )
                       ]),

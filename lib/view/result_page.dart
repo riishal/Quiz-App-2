@@ -221,7 +221,7 @@ class ResultPage extends StatelessWidget {
                             var getdata = Provider.of<QuestionsProvider>(
                                 context,
                                 listen: false);
-                            getdata.reviewList = [];
+                            getdata.quizList = [];
                             getdata.indexfornextquestion = 0;
                             getdata.pageIndex = 1;
                             Navigator.pushAndRemoveUntil(

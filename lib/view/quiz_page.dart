@@ -157,9 +157,9 @@ class _QuizPageState extends State<QuizPage> {
                                   (getdata.indexfornextquestion < 10 &&
                                           getdata.indexfornextquestion >= 0)
                                       ? getdata
-                                          .data[getdata.indexfornextquestion]
+                                          .quizList[
+                                              getdata.indexfornextquestion]
                                           .question
-                                          .text
                                       : '',
                                   style: GoogleFonts.asap(
                                       fontSize: 23,
@@ -177,73 +177,97 @@ class _QuizPageState extends State<QuizPage> {
                       SizedBox(
                           // height: 340,
                           width: 360,
-                          child: Column(
-                            children: [
-                              ...List.generate(getdata.results.length, (index) {
-                                var result = getdata.results[index];
+                          child: (getdata.indexfornextquestion < 10 &&
+                                  getdata.indexfornextquestion >= 0)
+                              ? Column(
+                                  children: [
+                                    ...List.generate(
+                                        getdata
+                                            .quizList[
+                                                getdata.indexfornextquestion]
+                                            .choices
+                                            .length, (index) {
+                                      var result = getdata
+                                          .quizList[
+                                              getdata.indexfornextquestion]
+                                          .choices[index];
 
-                                return GestureDetector(
-                                  onTap: () {
-                                    getdata.answerCheck(index, result);
-                                  },
-                                  child: Container(
-                                    height: 60,
-                                    // width: 200,
-                                    margin: const EdgeInsets.only(
-                                        bottom: 10, left: 5, right: 5),
-                                    decoration: BoxDecoration(
-                                        color: getdata.buttonIndex == index
-                                            ? Colors.black
-                                            : Colors.white,
-                                        boxShadow: [
-                                          BoxShadow(
-                                              blurRadius: 1,
-                                              color: Colors.grey,
-                                              offset: Offset(3, 3)),
-                                        ],
-                                        borderRadius:
-                                            BorderRadius.circular(15)),
-                                    child: Center(
-                                        child: Row(
-                                      children: [
-                                        const SizedBox(
-                                          width: 20,
-                                        ),
-                                        Text(
-                                          '${index + 1}.',
-                                          style: GoogleFonts.asap(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                            color: getdata.buttonIndex == index
-                                                ? Colors.white
-                                                : Colors.black,
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                          width: 20,
-                                        ),
-                                        Expanded(
-                                          child: SizedBox(
-                                            width: 260,
-                                            child: Text(
-                                              result,
-                                              style: GoogleFonts.asap(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w400,
-                                                  color: getdata.buttonIndex ==
+                                      return GestureDetector(
+                                        onTap: () {
+                                          getdata.answerCheck(index, result);
+                                        },
+                                        child: Container(
+                                          height: 60,
+                                          // width: 200,
+                                          margin: const EdgeInsets.only(
+                                              bottom: 10, left: 5, right: 5),
+                                          decoration: BoxDecoration(
+                                              color: getdata
+                                                          .quizList[getdata
+                                                              .indexfornextquestion]
+                                                          .selectedIndex ==
+                                                      index
+                                                  ? Colors.black
+                                                  : Colors.white,
+                                              boxShadow: const [
+                                                BoxShadow(
+                                                    blurRadius: 1,
+                                                    color: Colors.grey,
+                                                    offset: Offset(3, 3)),
+                                              ],
+                                              borderRadius:
+                                                  BorderRadius.circular(15)),
+                                          child: Center(
+                                              child: Row(
+                                            children: [
+                                              const SizedBox(
+                                                width: 20,
+                                              ),
+                                              Text(
+                                                '${index + 1}.',
+                                                style: GoogleFonts.asap(
+                                                  fontSize: 18,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: getdata
+                                                              .quizList[getdata
+                                                                  .indexfornextquestion]
+                                                              .selectedIndex ==
                                                           index
                                                       ? Colors.white
-                                                      : Colors.black),
-                                            ),
-                                          ),
+                                                      : Colors.black,
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                width: 20,
+                                              ),
+                                              Expanded(
+                                                child: SizedBox(
+                                                  width: 260,
+                                                  child: Text(
+                                                    result,
+                                                    style: GoogleFonts.asap(
+                                                        fontSize: 16,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        color: getdata
+                                                                    .quizList[
+                                                                        getdata
+                                                                            .indexfornextquestion]
+                                                                    .selectedIndex ==
+                                                                index
+                                                            ? Colors.white
+                                                            : Colors.black),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          )),
                                         ),
-                                      ],
-                                    )),
-                                  ),
-                                );
-                              })
-                            ],
-                          )),
+                                      );
+                                    })
+                                  ],
+                                )
+                              : Container()),
                       const SizedBox(
                         height: 10,
                       ),
